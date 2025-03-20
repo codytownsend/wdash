@@ -1,0 +1,23 @@
+# Environment files
+/config/.env
+.env
+/config/app.php
+app.php
+
+# Dependency directories
+/vendor/
+
+# Cache and logs
+/cache/*
+/logs/*
+!cache/.gitkeep
+!logs/.gitkeep
+
+# IDE files
+.idea/
+.vscode/
+*.sublime-*
+
+# OS files
+.DS_Store
+Thumbs.db
