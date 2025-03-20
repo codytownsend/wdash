@@ -1,7 +1,7 @@
 <?php
 /**
- * Modern Store Orders Page (2025 Design)
- * Save this file as public/store-orders.php
+ * Brand-Aligned Orders Page
+ * Tailored to match House of Soap's visual identity
  */
 require_once __DIR__ . '/../src/bootstrap.php';
 
@@ -68,14 +68,14 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($storeId) ?> House of Soap - Orders</title>
+    <title><?= htmlspecialchars($storeId) ?> Orders - House of Soap</title>
     
-    <!-- Modern fonts -->
+    <!-- Modern fonts - Matching typeface from their site -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Modern CSS framework -->
+    <!-- Framework -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     
     <!-- Icons -->
@@ -86,395 +86,472 @@ try {
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/dayjs.min.js"></script>
     
     <style>
-        /* Custom 2025 Design System */
         :root {
-            /* Color palette - modern dark theme */
-            --color-bg-primary: #0f172a;
-            --color-bg-secondary: #1e293b;
-            --color-bg-tertiary: #334155;
-            --color-bg-accent: #0f766e;
+            /* House of Soap Brand Colors */
+            --color-white: #FFFFFF;
+            --color-cream: #FFFCF2;
+            --color-taupe: #D7D2CB;
+            --color-olive: #899064;
+            --color-charcoal: #333333;
             
-            --color-text-primary: #f1f5f9;
-            --color-text-secondary: #94a3b8;
-            --color-text-muted: #64748b;
+            /* Extended palette */
+            --color-cream-dark: #F5F2E3;
+            --color-taupe-light: #E5E1DB;
+            --color-taupe-dark: #AEA89F;
+            --color-olive-light: #A8AD7B;
+            --color-olive-dark: #6B7247;
             
-            --color-border: #2e3b52;
+            /* Status colors - natural/earthy tones */
+            --color-success: #71986A; /* Sage green */
+            --color-warning: #D2A24C; /* Amber */
+            --color-danger: #B86B6B;  /* Terracotta */
+            --color-info: #6A8CAD;    /* Dusty blue */
             
-            --color-brand-primary: #14b8a6;
-            --color-brand-secondary: #0d9488;
+            /* Surfaces */
+            --surface-primary: var(--color-white);
+            --surface-secondary: var(--color-cream);
+            --surface-tertiary: var(--color-taupe-light);
+            --surface-accent: var(--color-olive-light);
             
-            --color-success: #22c55e;
-            --color-warning: #eab308;
-            --color-danger: #ef4444;
-            --color-info: #3b82f6;
+            /* Text colors */
+            --text-primary: var(--color-charcoal);
+            --text-secondary: #5F5F5F;
+            --text-tertiary: #8A8A8A;
+            --text-light: var(--color-white);
             
-            /* Modern drop shadows */
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15), 0 1px 5px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.1);
+            /* Shadows - softer for natural look */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+            --shadow-focus: 0 0 0 3px rgba(137, 144, 100, 0.2);
             
-            /* Modern spacing */
-            --space-1: 0.25rem;
-            --space-2: 0.5rem;
-            --space-3: 0.75rem;
-            --space-4: 1rem;
-            --space-6: 1.5rem;
-            --space-8: 2rem;
-            --space-12: 3rem;
-            --space-16: 4rem;
-            
-            /* Modern radius */
-            --radius-sm: 0.25rem;
-            --radius-md: 0.5rem;
-            --radius-lg: 0.75rem;
-            --radius-xl: 1rem;
+            /* Border radius - softer corners */
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
             --radius-full: 9999px;
         }
         
         [x-cloak] { display: none !important; }
         
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--color-bg-primary);
-            color: var(--color-text-primary);
+        html, body {
+            background-color: var(--color-cream);
+            color: var(--text-primary);
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.5;
         }
         
-        /* Modern card designs with subtle depth */
-        .card {
-            background-color: var(--color-bg-secondary);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--color-border);
-            box-shadow: var(--shadow-md);
-            overflow: hidden;
+        /* Navbar styling */
+        .navbar {
+            background-color: var(--surface-primary);
+            border-bottom: 1px solid var(--color-taupe);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
         }
         
-        /* Modern input styles */
-        .input-modern {
-            background-color: var(--color-bg-tertiary);
-            border: 1px solid var(--color-border);
-            color: var(--color-text-primary);
-            border-radius: var(--radius-md);
-            padding: var(--space-2) var(--space-4);
-            transition: all 0.2s ease;
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
         }
         
-        .input-modern:focus {
-            border-color: var(--color-brand-primary);
-            box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.3);
-            outline: none;
+        /* Logo styling */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            font-size: 1.25rem;
+            color: var(--text-primary);
         }
         
-        /* Modern button styles */
+        .logo-icon {
+            background-color: var(--color-olive);
+            color: white;
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            padding: 0.625rem 1.25rem;
             border-radius: var(--radius-md);
-            padding: var(--space-2) var(--space-4);
             font-weight: 500;
             transition: all 0.2s ease;
-            cursor: pointer;
+            box-shadow: var(--shadow-sm);
         }
         
         .btn-primary {
-            background-color: var(--color-brand-primary);
+            background-color: var(--color-olive);
             color: white;
         }
         
         .btn-primary:hover {
-            background-color: var(--color-brand-secondary);
+            background-color: var(--color-olive-dark);
         }
         
         .btn-outline {
             background-color: transparent;
-            border: 1px solid var(--color-border);
-            color: var(--color-text-primary);
+            border: 1px solid var(--color-taupe);
+            color: var(--text-secondary);
         }
         
         .btn-outline:hover {
-            border-color: var(--color-brand-primary);
-            color: var(--color-brand-primary);
+            border-color: var(--color-olive);
+            color: var(--color-olive);
         }
         
-        /* Modern badge styles */
+        /* Card surfaces */
+        .soap-card {
+            background: var(--surface-primary);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+        
+        /* Search input */
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .search-input {
+            width: 100%;
+            background: var(--surface-secondary);
+            border: 1px solid var(--color-taupe-light);
+            border-radius: var(--radius-md);
+            padding: 0.625rem 1rem 0.625rem 2.5rem;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+        
+        .search-input:focus {
+            border-color: var(--color-olive);
+            box-shadow: var(--shadow-focus);
+            outline: none;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+            font-size: 1rem;
+        }
+        
+        /* Status badges */
         .badge {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
+            padding: 0.375rem 0.75rem;
             border-radius: var(--radius-full);
-            padding: 0.15rem 0.5rem;
             font-size: 0.75rem;
             font-weight: 500;
         }
         
-        .badge-success {
-            background-color: rgba(34, 197, 94, 0.2);
+        .badge-completed {
+            background-color: rgba(113, 152, 106, 0.15);
             color: var(--color-success);
         }
         
-        .badge-warning {
-            background-color: rgba(234, 179, 8, 0.2);
-            color: var(--color-warning);
-        }
-        
-        .badge-danger {
-            background-color: rgba(239, 68, 68, 0.2);
-            color: var(--color-danger);
-        }
-        
-        .badge-info {
-            background-color: rgba(59, 130, 246, 0.2);
+        .badge-processing {
+            background-color: rgba(106, 140, 173, 0.15);
             color: var(--color-info);
         }
         
-        .badge-default {
-            background-color: rgba(100, 116, 139, 0.2);
-            color: var(--color-text-secondary);
+        .badge-onhold {
+            background-color: rgba(210, 162, 76, 0.15);
+            color: var(--color-warning);
         }
         
-        /* Modern animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .badge-pending {
+            background-color: rgba(174, 168, 159, 0.15);
+            color: var(--text-tertiary);
         }
         
-        .animate-fade-in {
-            animation: fadeIn 0.3s ease forwards;
+        /* Table styling */
+        .table-container {
+            background: var(--surface-primary);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
         }
         
-        /* Modern table styles */
-        .table-modern {
+        .modern-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
         }
         
-        .table-modern th {
-            background-color: var(--color-bg-tertiary);
-            padding: var(--space-3) var(--space-4);
+        .modern-table th {
+            background: var(--color-taupe-light);
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 0.875rem 1rem;
             text-align: left;
-            font-weight: 500;
-            color: var(--color-text-secondary);
-            border-bottom: 1px solid var(--color-border);
-        }
-        
-        .table-modern td {
-            padding: var(--space-3) var(--space-4);
-            border-bottom: 1px solid var(--color-border);
-        }
-        
-        .table-modern tr:hover td {
-            background-color: rgba(51, 65, 85, 0.4);
-        }
-        
-        /* Glassmorphism top navigation */
-        .top-nav {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--color-border);
             position: sticky;
             top: 0;
-            z-index: 100;
         }
         
-        /* Modern scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        .modern-table th:first-child {
+            border-top-left-radius: var(--radius-sm);
         }
         
-        ::-webkit-scrollbar-track {
-            background: var(--color-bg-secondary);
+        .modern-table th:last-child {
+            border-top-right-radius: var(--radius-sm);
         }
         
-        ::-webkit-scrollbar-thumb {
-            background: var(--color-bg-tertiary);
-            border-radius: var(--radius-full);
+        .modern-table td {
+            padding: 0.875rem 1rem;
+            border-top: 1px solid var(--color-taupe-light);
         }
         
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--color-brand-primary);
+        .modern-table tr:hover td {
+            background-color: var(--color-cream);
         }
         
-        /* Loading shimmer effect */
-        @keyframes shimmer {
-            0% {
-                background-position: -1000px 0;
+        .order-number {
+            font-weight: 600;
+            color: var(--color-olive);
+        }
+        
+        .order-total {
+            font-weight: 600;
+            text-align: right;
+        }
+        
+        /* Source tag */
+        .source-tag {
+            display: inline-flex;
+            padding: 0.25rem 0.5rem;
+            background: var(--color-taupe-light);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Empty state */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+            color: var(--text-tertiary);
+        }
+        
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--color-taupe);
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: var(--surface-primary);
+            border-top: 1px solid var(--color-taupe);
+            padding: 1.5rem;
+            color: var(--text-tertiary);
+            font-size: 0.875rem;
+        }
+        
+        /* Loading spinner */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-spinner {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            border: 3px solid rgba(137, 144, 100, 0.1);
+            border-top-color: var(--color-olive);
+            animation: spin 1s linear infinite;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        /* Layout container */
+        .layout-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .layout-container {
+                padding: 1rem;
             }
-            100% {
-                background-position: 1000px 0;
+            
+            .modern-table th, 
+            .modern-table td {
+                padding: 0.75rem;
             }
-        }
-        
-        .loading-shimmer {
-            background: linear-gradient(
-                to right,
-                var(--color-bg-tertiary) 8%,
-                var(--color-bg-secondary) 18%,
-                var(--color-bg-tertiary) 33%
-            );
-            background-size: 1000px 100%;
-            animation: shimmer 2s infinite linear;
         }
     </style>
 </head>
 <body>
     <div x-data="ordersPage()" x-init="init()" class="min-h-screen flex flex-col">
-        <!-- Top navigation -->
-        <nav class="top-nav py-4 px-6 mb-6">
-            <div class="container mx-auto flex justify-between items-center">
-                <div class="flex items-center">
-                    <div class="mr-2 text-brand-primary">
-                        <i class="bi bi-bar-chart-fill text-2xl text-teal-500"></i>
-                    </div>
-                    <h1 class="text-xl font-semibold">WC Insights</h1>
+        <!-- Navigation -->
+        <header class="navbar">
+            <div class="navbar-container">
+                <div class="logo">
+                    <span>House of Soap</span>
                 </div>
                 
                 <div class="flex items-center space-x-4">
-                    <a href="/" class="btn btn-outline flex items-center">
+                    <a href="./index.php" class="btn btn-outline flex items-center">
                         <i class="bi bi-arrow-left mr-2"></i>
                         Back to Dashboard
                     </a>
-                    <a href="/logout.php" class="flex items-center text-red-400 hover:text-red-300">
-                        <i class="bi bi-box-arrow-right mr-1"></i>
-                        <span class="hidden md:inline">Logout</span>
-                    </a>
                 </div>
             </div>
-        </nav>
+        </header>
         
-        <main class="container mx-auto px-6 pb-16 flex-grow">
-            <!-- Flash messages -->
-            <?php if (!empty($messages['error'])): ?>
-                <div class="bg-red-900/40 border border-red-500/30 text-red-300 px-4 py-3 rounded-md mb-6 flex items-start">
-                    <i class="bi bi-exclamation-triangle flex-shrink-0 mr-3 text-red-500"></i>
-                    <span><?= htmlspecialchars($messages['error']) ?></span>
-                </div>
-            <?php endif; ?>
-            
-            <?php if (!empty($messages['success'])): ?>
-                <div class="bg-green-900/40 border border-green-500/30 text-green-300 px-4 py-3 rounded-md mb-6 flex items-start">
-                    <i class="bi bi-check-circle flex-shrink-0 mr-3 text-green-500"></i>
-                    <span><?= htmlspecialchars($messages['success']) ?></span>
-                </div>
-            <?php endif; ?>
-
-            <div class="card p-6">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-                    <div>
-                        <h2 class="text-xl font-medium mb-1 flex items-center">
-                            <i class="bi bi-shop-window mr-2 text-teal-500"></i>
-                            <span><?= htmlspecialchars($storeId) ?> Orders</span>
-                        </h2>
-                        <p class="text-sm text-gray-400">
-                            <?= $startDate->format('Y-m-d') ?> to <?= $endDate->format('Y-m-d') ?>
-                            <span class="text-xs">(<?= $timezone->getName() ?>)</span>
-                        </p>
+        <main class="flex-grow">
+            <div class="layout-container">
+                <!-- Flash messages -->
+                <?php if (!empty($messages['error'])): ?>
+                    <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-6 flex items-start">
+                        <i class="bi bi-exclamation-triangle flex-shrink-0 mr-3 text-red-500"></i>
+                        <span><?= htmlspecialchars($messages['error']) ?></span>
                     </div>
-                    
-                    <div class="mt-4 md:mt-0">
-                        <div class="relative">
-                            <div class="flex">
+                <?php endif; ?>
+                
+                <?php if (!empty($messages['success'])): ?>
+                    <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md mb-6 flex items-start">
+                        <i class="bi bi-check-circle flex-shrink-0 mr-3 text-green-500"></i>
+                        <span><?= htmlspecialchars($messages['success']) ?></span>
+                    </div>
+                <?php endif; ?>
+                
+                <div class="soap-card p-6 mb-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                        <div>
+                            <h1 class="text-2xl font-bold mb-2 flex items-center">
+                                <span class="text-olive-600 mr-2"><?= htmlspecialchars($storeId) ?></span>
+                                <span>Orders</span>
+                            </h1>
+                            <p class="text-sm text-gray-600">
+                                <?= $startDate->format('Y-m-d') ?> to <?= $endDate->format('Y-m-d') ?>
+                                <span class="text-gray-400 text-xs ml-1">(<?= $timezone->getName() ?>)</span>
+                            </p>
+                        </div>
+                        
+                        <div class="mt-4 md:mt-0">
+                            <div class="search-container">
+                                <i class="bi bi-search search-icon"></i>
                                 <input type="text" 
                                        x-model="searchQuery" 
                                        placeholder="Search orders..." 
-                                       class="input-modern pr-8">
-                                <div class="absolute right-3 top-2 text-gray-400">
-                                    <i class="bi bi-search"></i>
-                                </div>
+                                       class="search-input">
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Loading State -->
-                <div x-show="loading" class="flex flex-col items-center py-12">
-                    <div class="relative w-16 h-16 mb-4">
-                        <div class="absolute inset-0 border-t-2 border-r-2 border-teal-500 rounded-full animate-spin"></div>
-                    </div>
-                    <span class="text-gray-400">Loading orders...</span>
-                </div>
-
-                <!-- Error State -->
-                <div x-show="error && !loading" class="bg-red-900/40 border border-red-500/30 text-red-300 p-4 rounded-md flex items-start">
-                    <i class="bi bi-exclamation-triangle flex-shrink-0 mr-3 text-red-500"></i>
-                    <div>
-                        <h3 class="font-medium">Error Loading Orders</h3>
-                        <p x-text="error" class="text-sm"></p>
-                    </div>
-                </div>
-
-                <!-- Orders Table -->
-                <div x-show="!loading && !error" class="overflow-x-auto">
-                    <table class="table-modern">
-                        <thead>
-                            <tr>
-                                <th class="rounded-tl-md">Order #</th>
-                                <th>Date/Time</th>
-                                <th>Status</th>
-                                <th class="text-right">Total</th>
-                                <th class="rounded-tr-md">Source</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <template x-if="filteredOrders.length === 0">
-                                <tr>
-                                    <td colspan="5" class="text-center py-12 text-gray-400">
-                                        <div class="flex flex-col items-center">
-                                            <i class="bi bi-inbox text-4xl mb-2"></i>
-                                            <p>No orders found for this time period</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </template>
-                            <template x-for="order in filteredOrders" :key="order.id">
-                                <tr>
-                                    <td>
-                                        <span class="text-teal-500 font-medium" x-text="'#' + order.number"></span>
-                                    </td>
-                                    <td x-text="formatDate(order.date_created)"></td>
-                                    <td>
-                                        <span class="badge"
-                                              :class="{
-                                                  'badge-success': order.status === 'completed',
-                                                  'badge-info': order.status === 'processing',
-                                                  'badge-warning': order.status === 'on-hold',
-                                                  'badge-default': order.status === 'pending',
-                                                  'badge-default': !['completed', 'processing', 'on-hold', 'pending'].includes(order.status)
-                                              }">
-                                            <span class="w-1.5 h-1.5 rounded-full mr-1.5"
-                                                  :class="{
-                                                      'bg-green-400': order.status === 'completed',
-                                                      'bg-blue-400': order.status === 'processing',
-                                                      'bg-yellow-400': order.status === 'on-hold',
-                                                      'bg-gray-400': order.status === 'pending',
-                                                      'bg-gray-400': !['completed', 'processing', 'on-hold', 'pending'].includes(order.status)
-                                                  }"></span>
-                                            <span x-text="capitalizeFirst(order.status)"></span>
-                                        </span>
-                                    </td>
-                                    <td class="text-right font-medium">
-                                        <span x-text="currencySymbol + formatNumber(order.total, 2)"></span>
-                                    </td>
-                                    <td>
-                                        <span class="px-2 py-1 bg-gray-800 rounded text-sm" x-text="getOrderSource(order)"></span>
-                                    </td>
-                                </tr>
-                            </template>
-                        </tbody>
-                    </table>
                     
-                    <div x-show="!loading && !error && filteredOrders.length > 0" class="mt-6 flex justify-between items-center">
-                        <div class="text-sm text-gray-400">
+                    <!-- Loading State -->
+                    <div x-show="loading" class="flex flex-col items-center py-16">
+                        <div class="loading-spinner mb-4"></div>
+                        <span class="text-gray-500">Loading orders...</span>
+                    </div>
+                    
+                    <!-- Error State -->
+                    <div x-show="error && !loading" class="bg-red-50 border border-red-200 text-red-700 p-6 rounded-md">
+                        <div class="flex items-start">
+                            <i class="bi bi-exclamation-triangle flex-shrink-0 mr-3 text-red-500 text-xl"></i>
+                            <div>
+                                <h3 class="font-semibold text-lg mb-2">Error Loading Orders</h3>
+                                <p x-text="error"></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Orders Table -->
+                    <div x-show="!loading && !error" class="table-container">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Date/Time</th>
+                                    <th>Status</th>
+                                    <th>Total</th>
+                                    <th>Source</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template x-if="filteredOrders.length === 0">
+                                    <tr>
+                                        <td colspan="5">
+                                            <div class="empty-state">
+                                                <i class="bi bi-inbox empty-icon"></i>
+                                                <p class="text-lg font-medium mb-2">No orders found</p>
+                                                <p class="text-sm">There are no orders for this time period.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+                                
+                                <template x-for="order in filteredOrders" :key="order.id">
+                                    <tr>
+                                        <td class="order-number" x-text="'#' + order.number"></td>
+                                        <td x-text="formatDate(order.date_created)"></td>
+                                        <td>
+                                            <span :class="{
+                                                'badge badge-completed': order.status === 'completed',
+                                                'badge badge-processing': order.status === 'processing',
+                                                'badge badge-onhold': order.status === 'on-hold',
+                                                'badge badge-pending': order.status === 'pending' || !['completed', 'processing', 'on-hold'].includes(order.status)
+                                            }">
+                                                <span x-text="capitalizeFirst(order.status)"></span>
+                                            </span>
+                                        </td>
+                                        <td class="order-total">
+                                            <span x-text="currencySymbol + formatNumber(order.total, 2)"></span>
+                                        </td>
+                                        <td>
+                                            <div class="source-tag" x-text="getOrderSource(order)"></div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Order Summary -->
+                    <div x-show="!loading && !error && filteredOrders.length > 0" class="mt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center pt-4 border-t border-gray-200">
+                        <div class="text-sm text-gray-600 mb-3 sm:mb-0">
                             <span x-text="filteredOrders.length"></span> orders found
                             <span x-show="searchQuery && orders.length !== filteredOrders.length">
                                 (filtered from <span x-text="orders.length"></span>)
                             </span>
                         </div>
-                        <div class="text-right flex items-baseline">
-                            <span class="text-gray-400 mr-2">Total:</span>
-                            <span class="text-xl font-medium text-teal-400" x-text="currencySymbol + formatNumber(orderTotal, 2)"></span>
+                        <div class="text-right bg-gray-50 px-4 py-2 rounded-md border border-gray-200">
+                            <span class="text-gray-600 mr-2">Total:</span>
+                            <span class="text-xl font-bold text-olive-600" x-text="currencySymbol + formatNumber(orderTotal, 2)"></span>
                         </div>
                     </div>
                 </div>
@@ -482,13 +559,13 @@ try {
         </main>
         
         <!-- Footer -->
-        <footer class="py-6 px-6 border-t border-gray-800 mt-auto">
+        <footer class="footer mt-auto">
             <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
-                <div class="text-sm text-gray-500 mb-4 md:mb-0">
-                    <p>DOE Tech &copy; <?= date('Y') ?></p>
+                <div class="mb-4 md:mb-0">
+                    <p>House of Soap Insights &copy; <?= date('Y') ?></p>
                 </div>
                 <div class="flex space-x-4">
-                    <span class="text-xs text-gray-600">
+                    <span class="text-sm">
                         Server time: <?= date('Y-m-d H:i:s') ?>
                     </span>
                 </div>
@@ -532,7 +609,7 @@ try {
                     const endDate = '<?= $endDate->format('Y-m-d') ?>';
                     const rangeKey = '<?= htmlspecialchars($rangeKey ?? '') ?>';
                     
-                    let url = `/api/orders.php?store=${encodeURIComponent(storeId)}`;
+                    let url = `./api/orders.php?store=${encodeURIComponent(storeId)}`;
                     
                     if (rangeKey) {
                         url += `&range=${rangeKey}`;
@@ -548,15 +625,14 @@ try {
                             return response.json();
                         })
                         .then(data => {
-                            this.orders = data.orders;
-                            this.currencySymbol = data.currency_symbol;
+                            this.orders = data.orders || [];
+                            this.currencySymbol = data.currency_symbol || '$';
                             this.calculateTotal();
                             this.loading = false;
                         })
                         .catch(error => {
                             this.error = `Error loading orders: ${error.message}`;
                             this.loading = false;
-                            console.error('Orders error:', error);
                         });
                 },
                 
@@ -569,8 +645,8 @@ try {
                     const date = new Date(dateStr);
                     return date.toLocaleString('en-US', {
                         year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
+                        month: 'short',
+                        day: 'numeric',
                         hour: 'numeric',
                         minute: 'numeric',
                         hour12: true
@@ -604,10 +680,11 @@ try {
                 },
                 
                 formatNumber(number, decimals = 0) {
-                    return parseFloat(number).toLocaleString('en-US', {
+                    // Use browser's Intl formatter for better display
+                    return new Intl.NumberFormat('en-US', {
                         minimumFractionDigits: decimals,
                         maximumFractionDigits: decimals
-                    });
+                    }).format(number);
                 }
             };
         }

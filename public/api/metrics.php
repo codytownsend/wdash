@@ -1,6 +1,6 @@
 <?php
 /**
- * API endpoint for dashboard metrics
+ * API Metrics Endpoint
  */
 require_once __DIR__ . '/../../src/bootstrap.php';
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * API endpoint for store orders
+ * API Orders Endpoint
  */
 require_once __DIR__ . '/../../src/bootstrap.php';
 

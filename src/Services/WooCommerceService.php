@@ -64,20 +64,39 @@ class WooCommerceService {
     }
     
     /**
-     * Initialize Redis connection
+     * Initialize Redis connection with improved error handling
      */
     private function initRedis(): void {
+        // Skip Redis if explicitly disabled in config
+        if (isset($this->config['cache']['enabled']) && $this->config['cache']['enabled'] === false) {
+            $this->redis = null;
+            return;
+        }
+        
+        // Skip if Redis config is missing
+        if (!isset($this->config['cache']['redis'])) {
+            error_log("Redis config missing, skipping cache initialization");
+            $this->redis = null;
+            return;
+        }
+        
         try {
             $this->redis = new \Predis\Client([
                 'scheme' => 'tcp',
                 'host' => $this->config['cache']['redis']['host'] ?? '127.0.0.1',
                 'port' => $this->config['cache']['redis']['port'] ?? 6379,
                 'password' => $this->config['cache']['redis']['password'] ?? null,
+                'timeout' => 2, // 2 second timeout
+                'read_write_timeout' => 2
             ]);
             
+            // Test the connection with a ping
+            $this->redis->ping();
+            
             $this->cacheDuration = $this->config['cache']['duration'] ?? 300;
+            error_log("Redis connection successful");
         } catch (Exception $e) {
-            // Log the error
+            // Log the error but continue without Redis
             error_log("Redis connection failed: " . $e->getMessage());
             
             // Set redis to null to indicate no caching
@@ -113,27 +132,36 @@ class WooCommerceService {
     }
     
     /**
-     * Fetch data with caching
+     * Fetch data with caching - improved with better error handling
      */
     private function remember(string $key, callable $callback) {
-        // If Redis is not available, just execute the callback
+        // If Redis is not available, just execute the callback without caching
         if (!$this->redis) {
             return $callback();
         }
         
-        // Try to get from cache
-        $cached = $this->redis->get($key);
-        if ($cached !== null) {
-            return json_decode($cached, true);
+        try {
+            // Try to get from cache
+            $cached = $this->redis->get($key);
+            if ($cached !== null) {
+                $decoded = json_decode($cached, true);
+                if ($decoded !== null) {
+                    return $decoded;
+                }
+            }
+            
+            // If not in cache or decode failed, execute the callback
+            $fresh = $callback();
+            
+            // Store in cache
+            $this->redis->setex($key, $this->cacheDuration, json_encode($fresh));
+            
+            return $fresh;
+        } catch (Exception $e) {
+            // Log Redis error but continue without caching
+            error_log("Redis error in remember method: " . $e->getMessage());
+            return $callback();
         }
-        
-        // If not in cache, execute the callback
-        $fresh = $callback();
-        
-        // Store in cache
-        $this->redis->setex($key, $this->cacheDuration, json_encode($fresh));
-        
-        return $fresh;
     }
     
     /**
@@ -270,7 +298,7 @@ class WooCommerceService {
                 // Log error but return minimal info to client
                 error_log("Error getting metrics for {$storeId}: " . $e->getMessage());
                 $metrics[$storeId] = [
-                    'error' => 'Failed to fetch data',
+                    'error' => 'Failed to fetch data: ' . $e->getMessage(),
                     'currency' => $this->config['stores'][$storeId]['currency'],
                     'currency_symbol' => $this->config['stores'][$storeId]['currency_symbol']
                 ];
@@ -327,7 +355,11 @@ class WooCommerceService {
                 
             } catch (Exception $e) {
                 error_log("Error getting attribution for {$storeId}: " . $e->getMessage());
-                $attribution[$storeId] = ['error' => 'Failed to fetch attribution data'];
+                $attribution[$storeId] = [
+                    'error' => 'Failed to fetch attribution data: ' . $e->getMessage(),
+                    'currency' => $this->config['stores'][$storeId]['currency'],
+                    'currency_symbol' => $this->config['stores'][$storeId]['currency_symbol']
+                ];
             }
         }
         
