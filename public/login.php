@@ -2,7 +2,7 @@
 /**
  * Login page
  */
-require_once __DIR__ . '/../src/bootstrap_new.php';
+require_once __DIR__ . '/../src/bootstrap.php';
 
 // Handle login form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
